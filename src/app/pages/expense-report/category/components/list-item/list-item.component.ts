@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Required } from 'src/app/core/decorators/required-input';
 import { CategoryService } from 'src/app/core/services/category/category.service';
-import { CreateComponent } from '../create/create.component';
+import { CreateCategoryComponent } from '../create-category/create-category.component';
 
 @Component({
   selector: 'app-list-item',
@@ -13,18 +13,24 @@ import { CreateComponent } from '../create/create.component';
 export class ListItemComponent {
   constructor(private categoryService: CategoryService) {
     this.spendbudget = categoryService.getSpendBudget();
+    this.expenseReportId = categoryService.expenseReportId;
   }
 
   public spendbudget: number;
+
+  public expenseReportId: string;
 
   @Input() @Required category!: Category;
 
   @Input() @Required dialog!: MatDialog;
 
   editCategory() {
-    this.dialog.open(CreateComponent, {
+    this.dialog.open(CreateCategoryComponent, {
       width: '500px',
-      data: this.category,
+      data: {
+        category: this.category,
+        categoryService: this.categoryService,
+      },
     });
   }
 
